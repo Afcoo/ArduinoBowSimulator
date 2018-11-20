@@ -27,7 +27,13 @@ public class SerialCommunication : MonoBehaviour {
     {
         try
         {
-            _serialPort = new SerialPort(port, baudrate);
+            _serialPort = new SerialPort();
+            _serialPort.PortName = port;
+            _serialPort.BaudRate = baudrate;
+            _serialPort.NewLine = "\n";
+            _serialPort.ReadTimeout = 50;
+            //_serialPort.DataReceived += new SerialDataReceivedEventHandler(Port_DataReceived);
+
             _serialPort.Open();
             if (_serialPort.IsOpen)
             {
@@ -37,9 +43,15 @@ public class SerialCommunication : MonoBehaviour {
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.Log("Error : " + e);
         }
     }
+
+    //private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+    //{
+    //    // Show all the incoming data in the port's buffer in the output window
+    //    Debug.Log("data : " + _serialPort.ReadExisting());
+    //}
 
     public void StartCommuncation()
     {
@@ -61,16 +73,25 @@ public class SerialCommunication : MonoBehaviour {
         _serialPort.Close();
         state = "disconnected";
     }
-    
+
     void SerialGetLIne()
     {
-        state = "communicating";
-        while(_serialPort.IsOpen)
+        if (_serialPort.IsOpen)
         {
             try
             {
-                //Debug.Log(readLine);
-                readLine = _serialPort.ReadLine();
+                string line = _serialPort.ReadExisting();
+                while (line == null || line == string.Empty)
+                {
+                    line = _serialPort.ReadExisting();
+                }
+                readLine = line;
+                state = "communicating";
+
+                while (true)
+                {
+                    readLine = _serialPort.ReadLine();
+                }
             }
             catch (Exception e)
             {
@@ -86,7 +107,7 @@ public class SerialCommunication : MonoBehaviour {
     {
         if (_serialPort != null && _serialPort.IsOpen)
         {
-            _thread.Abort();
+            //_thread.Abort();
             _serialPort.Close();
             state = "disconnected";
             Debug.Log("Serial Port Closed!");

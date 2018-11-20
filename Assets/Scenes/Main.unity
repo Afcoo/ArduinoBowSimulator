@@ -542,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d1116ca3d75a4046bd54d9e426f5329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: COM12
+  port: COM6
   baudrate: 115200
   readLine: 
   state: disconnected

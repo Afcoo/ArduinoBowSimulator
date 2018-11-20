@@ -34,56 +34,60 @@ public class PullingController : MonoBehaviour {
         PrevPullingValue = IdlePullingValue;
 
         PrevTime = Time.time;
-        GameObject arrow = createArrow.GetComponent<CreateArrow>().CreateNewArrow();
-        GameObject Fletchings = arrow.transform.FindChild("Fletchings").gameObject;
-        Fletchings.GetComponent<Rigidbody>().AddForce(player.transform.forward * 140 * 200f);
+        //GameObject arrow = createArrow.GetComponent<CreateArrow>().CreateNewArrow();
+        //GameObject Fletchings = arrow.transform.FindChild("Fletchings").gameObject;
+        //Fletchings.GetComponent<Rigidbody>().AddForce(player.transform.forward * 140 * 200f);
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        Debug.Log("FPS : " + 1 / Time.deltaTime);
         if (serial.state == "communicating")
         {
-            SerialLine = serial.readLine;
-            string[] parced = SerialLine.Split(',');
-            //Debug.Log(parced[0] + ' ' + parced[1] + ' ' + parced[2] + ' ' + parced[3]);
-
-            PullingValue = int.Parse(parced[0]);
-            rotation_y = float.Parse(parced[1]);
-            rotation_x = float.Parse(parced[2]) * -1f;
-            rotation_z = float.Parse(parced[3]) * -1f;
-
-            if(Mathf.Abs(PullingValue - PrevPullingValue) < 5)
+            try
             {
-                Bow_Rotation.eulerAngles = new Vector3(rotation_x, rotation_y, rotation_z);
-                Vector2 sizeVector = new Vector2(1, 1) * (MaxAimOutlinePixel - (MaxAimOutlinePixel - MinAimOUtlinePixel) * (IdlePullingValue - PullingValue) / MaxPullingValueGap);
-                Aim_Outline.GetComponent<RectTransform>().sizeDelta = sizeVector;
-            }
+                //Debug.Log(serial.readLine);
+                SerialLine = serial.readLine;
+                string[] parced = SerialLine.Split(',');
+                //Debug.Log(parced[0] + ' ' + parced[1] + ' ' + parced[2] + ' ' + parced[3]);
+
+                PullingValue = int.Parse(parced[0]);
+                rotation_y = float.Parse(parced[1]);
+                rotation_x = float.Parse(parced[2]) * -1f;
+                rotation_z = float.Parse(parced[3]) * -1f;
+
+                if(Mathf.Abs(PullingValue - PrevPullingValue) < 5)
+                {
+                    Bow_Rotation.eulerAngles = new Vector3(rotation_x, rotation_y, rotation_z);
+                    Vector2 sizeVector = new Vector2(1, 1) * (MaxAimOutlinePixel - (MaxAimOutlinePixel - MinAimOUtlinePixel) * (IdlePullingValue - PullingValue) / MaxPullingValueGap);
+                    Aim_Outline.GetComponent<RectTransform>().sizeDelta = sizeVector;
+                }
                 
 
-            player.transform.rotation = Bow_Rotation;
+                player.transform.rotation = Bow_Rotation;
 
-            if(Time.time - PrevTime > SpeedCheckInterval)
-            {
-                PullOutSpeed = (PullingValue - PrevPullingValue) / (Time.time - PrevTime);
-                PrevPullingValue = PullingValue;
-                PrevTime = Time.time;
-
-                if(PullOutSpeed > MinShottingPullOutSpeed)
+                if(Time.time - PrevTime > SpeedCheckInterval)
                 {
-                    ShotArrow(PullOutSpeed);
-                    PrevTime += 0.5f;
+                    PullOutSpeed = (PullingValue - PrevPullingValue) / (Time.time - PrevTime);
+                    PrevPullingValue = PullingValue;
+                    PrevTime = Time.time;
+
+                    if(PullOutSpeed > MinShottingPullOutSpeed)
+                    {
+                        ShotArrow(PullOutSpeed);
+                        PrevTime += 0.5f;
+                    }
+                }
+                else if(Mathf.Abs(PullingValue - PrevPullingValue) < 5)
+                {
+                    PrevPullingValue = PullingValue;
+                    PrevTime = Time.time;
+
                 }
             }
-            else if(Mathf.Abs(PullingValue - PrevPullingValue) < 5)
+            catch (System.Exception e)
             {
-                PrevPullingValue = PullingValue;
-                PrevTime = Time.time;
-
-            }
-            else
-            {
-
             }
         }
 	}
