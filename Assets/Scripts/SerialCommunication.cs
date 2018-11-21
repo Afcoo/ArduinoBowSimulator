@@ -31,7 +31,7 @@ public class SerialCommunication : MonoBehaviour {
             _serialPort.PortName = port;
             _serialPort.BaudRate = baudrate;
             _serialPort.NewLine = "\n";
-            _serialPort.ReadTimeout = 50;
+            //_serialPort.ReadTimeout = 50;
             //_serialPort.DataReceived += new SerialDataReceivedEventHandler(Port_DataReceived);
 
             _serialPort.Open();
@@ -80,13 +80,18 @@ public class SerialCommunication : MonoBehaviour {
         {
             try
             {
+                _serialPort.WriteLine("start");
+                Debug.Log("Send start message");
                 string line = _serialPort.ReadExisting();
                 while (line == null || line == string.Empty)
                 {
+                    _serialPort.WriteLine("start");
+                    Debug.Log("waiting for response....");
                     line = _serialPort.ReadExisting();
                 }
-                readLine = line;
+                //readLine = line;
                 state = "communicating";
+                Debug.Log("communicate start");
 
                 while (true)
                 {

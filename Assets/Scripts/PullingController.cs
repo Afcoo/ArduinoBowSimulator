@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,7 +43,7 @@ public class PullingController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Debug.Log("FPS : " + 1 / Time.deltaTime);
+        //Debug.Log("FPS : " + 1 / Time.deltaTime);
         if (serial.state == "communicating")
         {
             try
@@ -54,10 +55,11 @@ public class PullingController : MonoBehaviour {
 
                 PullingValue = int.Parse(parced[0]);
                 rotation_y = float.Parse(parced[1]);
-                rotation_x = float.Parse(parced[2]) * -1f;
-                rotation_z = float.Parse(parced[3]) * -1f;
+                rotation_x = float.Parse(parced[2]) * -1;
+                rotation_z = float.Parse(parced[3]) * -1;
+                //rotation_z = 0f;
 
-                if(Mathf.Abs(PullingValue - PrevPullingValue) < 5)
+                if (Mathf.Abs(PullingValue - PrevPullingValue) < 5)
                 {
                     Bow_Rotation.eulerAngles = new Vector3(rotation_x, rotation_y, rotation_z);
                     Vector2 sizeVector = new Vector2(1, 1) * (MaxAimOutlinePixel - (MaxAimOutlinePixel - MinAimOUtlinePixel) * (IdlePullingValue - PullingValue) / MaxPullingValueGap);
@@ -86,8 +88,9 @@ public class PullingController : MonoBehaviour {
 
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
+                Debug.Log(e);
             }
         }
 	}
