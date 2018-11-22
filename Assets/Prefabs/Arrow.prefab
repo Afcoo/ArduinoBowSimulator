@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 4923793417192892}
   - component: {fileID: 65572237100849626}
   - component: {fileID: 54014240608469156}
+  - component: {fileID: 114345483942147342}
   m_Layer: 0
   m_Name: Arrowhead
   m_TagString: Untagged
@@ -224,7 +225,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1052698949435136}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4296092053255146}
@@ -540,6 +541,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 78041c6a4869a054c968cb248e68a19b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114345483942147342
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1881312297749078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 218bfd27205f5044fa5d64f180cfd0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!138 &138193943729385450

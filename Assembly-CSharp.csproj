@@ -56,7 +56,6 @@
      <Compile Include="Assets\Scripts\DestroyCollision.cs" />
      <Compile Include="Assets\Scripts\PullingController.cs" />
      <Compile Include="Assets\Scripts\SerialCommunication.cs" />
-     <Compile Include="Assets\Scripts\test.cs" />
  <Reference Include="UnityEngine.CoreModule">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
  </Reference>

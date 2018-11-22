@@ -30,10 +30,9 @@ public class PullingController : MonoBehaviour {
     public float MinShottingPullOutSpeed = 20f; // 화살을 날릴 수 있는 
     public float MaxShottingPullOutSpeed = 140f;
     
-
     void Start () {
         PrevPullingValue = IdlePullingValue;
-
+        
         PrevTime = Time.time;
         //GameObject arrow = createArrow.GetComponent<CreateArrow>().CreateNewArrow();
         //GameObject Fletchings = arrow.transform.FindChild("Fletchings").gameObject;
@@ -43,7 +42,7 @@ public class PullingController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        //Debug.Log("FPS : " + 1 / Time.deltaTime);
+         //Debug.Log("FPS : " + 1 / Time.deltaTime);
         if (serial.state == "communicating")
         {
             try
@@ -57,17 +56,15 @@ public class PullingController : MonoBehaviour {
                 rotation_y = float.Parse(parced[1]);
                 rotation_x = float.Parse(parced[2]) * -1;
                 rotation_z = float.Parse(parced[3]) * -1;
-                //rotation_z = 0f;
 
-                if (Mathf.Abs(PullingValue - PrevPullingValue) < 5)
+                Bow_Rotation.eulerAngles = new Vector3(rotation_x, rotation_y, rotation_z);
+                player.transform.rotation = Bow_Rotation;
+
+                if (Mathf.Abs(PullingValue - PrevPullingValue) > 3)
                 {
-                    Bow_Rotation.eulerAngles = new Vector3(rotation_x, rotation_y, rotation_z);
                     Vector2 sizeVector = new Vector2(1, 1) * (MaxAimOutlinePixel - (MaxAimOutlinePixel - MinAimOUtlinePixel) * (IdlePullingValue - PullingValue) / MaxPullingValueGap);
                     Aim_Outline.GetComponent<RectTransform>().sizeDelta = sizeVector;
                 }
-                
-
-                player.transform.rotation = Bow_Rotation;
 
                 if(Time.time - PrevTime > SpeedCheckInterval)
                 {
@@ -78,14 +75,13 @@ public class PullingController : MonoBehaviour {
                     if(PullOutSpeed > MinShottingPullOutSpeed)
                     {
                         ShotArrow(PullOutSpeed);
-                        PrevTime += 0.5f;
+                        PrevTime += 1f;
                     }
                 }
-                else if(Mathf.Abs(PullingValue - PrevPullingValue) < 5)
+                else if(Mathf.Abs(PullingValue - PrevPullingValue) < 20)
                 {
                     PrevPullingValue = PullingValue;
                     PrevTime = Time.time;
-
                 }
             }
             catch (Exception e)
@@ -97,9 +93,11 @@ public class PullingController : MonoBehaviour {
 
     void ShotArrow(float speed)
     {
+        if (speed > MaxShottingPullOutSpeed) speed = MaxShottingPullOutSpeed;
+
         Debug.Log(speed);
         GameObject arrow = createArrow.GetComponent<CreateArrow>().CreateNewArrow();
         GameObject Fletchings = arrow.transform.FindChild("Fletchings").gameObject;
-        Fletchings.GetComponent<Rigidbody>().AddForce(player.transform.forward * speed * 200f);
+        Fletchings.GetComponent<Rigidbody>().AddForce(player.transform.forward * (float)Math.Pow(speed / 100, 1.5) * 400f);
     }
 }
