@@ -47,12 +47,6 @@ public class SerialCommunication : MonoBehaviour {
         }
     }
 
-    //private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-    //{
-    //    // Show all the incoming data in the port's buffer in the output window
-    //    Debug.Log("data : " + _serialPort.ReadExisting());
-    //}
-
     public void StartCommuncation()
     {
         try
